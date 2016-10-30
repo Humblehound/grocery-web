@@ -1,3 +1,4 @@
 {
-	"DBHost": "YOUR_DB_URI"
+	"secret" : "IReallyMissTheWire",
+	"DBHost": "mongodb://localhost:27017/users"
 }
