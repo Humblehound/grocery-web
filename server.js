@@ -31,9 +31,9 @@ app.use(cors())
 // 	app.use(morgan('combined')); //'combined' outputs the Apache style LOGs
 // }
 
-db_name = 'users';
+let db_name = 'users';
 
-mongodb_connection_string = 'mongodb://localhost:27017/' + db_name;
+let mongodb_connection_string = 'mongodb://localhost:27017/' + db_name;
 //take advantage of openshift env vars when available:
 if(process.env.OPENSHIFT_MONGODB_DB_URL){
 	mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + db_name;
