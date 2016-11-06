@@ -17,8 +17,18 @@ let options = {
                 replset: { socketOptions: { keepAlive: 1, connectTimeoutMS : 30000 } } 
               }; 
 
-//db connection      
-mongoose.connect(config.DBHost, options);
+
+
+
+//db connection
+let db_name = 'users';
+let mongodb_connection_string = 'mongodb://localhost:27017/' + db_name;
+//take advantage of openshift env vars when available:
+if(process.env.OPENSHIFT_MONGODB_DB_URL){
+	mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + db_name;
+}
+
+mongoose.connect(mongodb_connection_string, options);
 let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
@@ -31,13 +41,6 @@ app.use(cors())
 // 	app.use(morgan('combined')); //'combined' outputs the Apache style LOGs
 // }
 
-let db_name = 'users';
-
-let mongodb_connection_string = 'mongodb://localhost:27017/' + db_name;
-//take advantage of openshift env vars when available:
-if(process.env.OPENSHIFT_MONGODB_DB_URL){
-	mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + db_name;
-}
 
 //parse application/json and look for raw text
 app.set('superSecret', config.secret); // secret variable
