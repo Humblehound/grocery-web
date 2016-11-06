@@ -21,7 +21,7 @@ let options = {
 
 
 //db connection
-let db_name = 'users';
+let db_name = 'grocery';
 let mongodb_connection_string = 'mongodb://localhost:27017/' + db_name;
 //take advantage of openshift env vars when available:
 if(process.env.OPENSHIFT_MONGODB_DB_URL){
