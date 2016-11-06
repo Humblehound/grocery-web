@@ -1,7 +1,7 @@
 {
-  "name": "bookstore",
+  "name": "grocery",
   "version": "1.0.0",
-  "description": "A bookstore API",
+  "description": "A grocery list API",
   "main": "server.js",
   "author": "Sam",
   "license": "ISC",
@@ -19,7 +19,7 @@
     "nodemon": "^1.11.0"
   },
   "scripts": {
-    "start": "NODE_ENV=dev && node $NODE_DEBUG_OPTION server.js",
+    "start": "NODE_ENV=dev && node $NODE_DEBUG_OPTION --use_strict server.js",
     "startlive": "NODE_ENV=dev && nodemon server.js",
     "test": "mocha --compilers js:babel-register --timeout 10000"
   }
