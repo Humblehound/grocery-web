@@ -10,6 +10,10 @@ let item = require('./app/routes/item');
 let user = require('./app/routes/user');
 let config = require('config'); //we load the db location from the JSON files
 let jwt = require('jsonwebtoken')
+let cors = require('cors')
+
+
+
 
 //db options
 let options = { 
@@ -23,6 +27,7 @@ let db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 app.use(morgan('dev'))
+app.use(cors())
 
 //don't show the log when it is test
 if(config.util.getEnv('NODE_ENV') !== 'test') {
@@ -37,7 +42,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));               
 app.use(bodyParser.text());                                    
 app.use(bodyParser.json({ type: 'application/json'}));
-
 
 var apiRoutes = express.Router();
 apiRoutes.use(function(req, res, next) {
@@ -62,19 +66,27 @@ apiRoutes.use(function(req, res, next) {
 	}
 });
 
+
+
 app.get("/", (req, res) => res.json({message: "Welcome to our Bookstore!"}));
 
 app.route("/login").post(user.login);
 app.route("/register").post(user.register);
 
+app.use('/user/:id', apiRoutes);
+app.route("/user/:id")
+	.delete(user.deleteUser);
+
 app.use('/item', apiRoutes);
-app.route("/item").post(item.postItem);
+app.route("/item")
+	.post(item.postItem)
+	.get(item.getItems);
 
 app.use('/item/:id', apiRoutes);
 app.route("/item/:id")
 	.get(item.getItem)
 	.delete(item.deleteItem)
-	.put(item.updateItem)
+	.put(item.updateItem);
 
 
 app.route("/book")

@@ -32,7 +32,7 @@ describe('Users', () => {
                 .post('/register')
                 .send(user)
                 .end((err, res) => {
-                        res.should.have.status(200);
+                        res.should.have.status(201);
                         res.body.should.be.a('object');
                         res.body.should.have.property('message', 'User registered successfully!');
                         done()
@@ -49,7 +49,7 @@ describe('Users', () => {
                 .post('/register')
                 .send(user)
                 .end((err, res) => {
-                        res.should.have.status(403);
+                        res.should.have.status(400);
                         res.body.should.be.a('object');
                         res.body.should.have.property('message', 'User already exists!');
                         done()
@@ -73,7 +73,7 @@ describe('Users', () => {
                 .post('/login')
                 .send(user)
                 .end((err, res) => {
-                        res.should.have.status(403);
+                        res.should.have.status(404);
                         res.body.should.be.a('object');
                         res.body.should.have.property('message', 'User not found');
                         done()
@@ -89,10 +89,8 @@ describe('Users', () => {
                     .end((err, res) => {
                             res.should.have.status(200);
                             res.body.should.be.a('object');
-                            res.body.user.should.be.a('object');
                             res.body.should.have.property('message', 'User logged in successfully');
                             res.body.should.have.property('token');
-                            res.body.should.have.property('user');
                             done()
                         }
                     );

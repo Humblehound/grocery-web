@@ -8,9 +8,9 @@ let ItemSchema = new Schema(
         store: {type: String},
         price: {type: Number, required: true},
         amount: {type: Number, required: true},
-        owner: {type: mongoose.Schema.Types.ObjectId, ref: 'user'}
+        owner: {type: Schema.Types.ObjectId, ref: 'User'}
     }
 );
 
 //Exports the BookSchema for use elsewhere.
-module.exports = mongoose.model('item', ItemSchema);
+module.exports = mongoose.model('Item', ItemSchema);

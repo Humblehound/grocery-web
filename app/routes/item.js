@@ -21,11 +21,18 @@ function getItem(req, res) {
     });
 }
 
+function getItems(req, res) {
+    console.log(req.query.userId)
+    Item.find({ 'owner' : req.query.userId}, (err, data) => {
+        if (err) res.send(err);
+        res.status(200).json(data);
+    });
+}
+
 function deleteItem(req, res) {
     Item.remove({_id: req.params.id}, (err, result) => {
         res.json({message: "Item successfully deleted", result})
     })
-
 }
 
 function updateItem(req, res){
@@ -38,4 +45,4 @@ function updateItem(req, res){
     })
 }
 //export all the functions
-module.exports = {getItem, postItem, deleteItem, updateItem};
+module.exports = {getItem, getItems, postItem, deleteItem, updateItem};
