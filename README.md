@@ -1,2 +1,2 @@
-# bookstore
-Source code for my Tutorial "Test a Node RESTful API with Mocha and Chai"
+# grocery-web
+A simple node.js rest backend for a grocery application
