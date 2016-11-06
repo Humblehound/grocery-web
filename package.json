@@ -20,7 +20,7 @@
     "password-hash": "^1.2.2"
   },
   "scripts": {
-    "start": "node $NODE_DEBUG_OPTION --use_strict server.js",
+    "start": "node --use_strict server.js",
     "startlive": "NODE_ENV=dev && nodemon server.js",
     "test": "mocha --compilers js:babel-register --timeout 10000"
   }
