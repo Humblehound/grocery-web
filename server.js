@@ -4,16 +4,12 @@ let app = express();
 let mongoose = require('mongoose');
 let morgan = require('morgan');
 let bodyParser = require('body-parser');
-let port = 8080;
-let book = require('./app/routes/book');
-let item = require('./app/routes/item');
-let user = require('./app/routes/user');
+let book = require('./routes/book');
+let item = require('./routes/item');
+let user = require('./routes/user');
 let config = require('config'); //we load the db location from the JSON files
 let jwt = require('jsonwebtoken')
 let cors = require('cors')
-
-
-
 
 //db options
 let options = { 
@@ -30,9 +26,17 @@ app.use(morgan('dev'))
 app.use(cors())
 
 //don't show the log when it is test
-if(config.util.getEnv('NODE_ENV') !== 'test') {
-	//use morgan to log at command line
-	app.use(morgan('combined')); //'combined' outputs the Apache style LOGs
+// if(config.util.getEnv('NODE_ENV') !== 'test') {
+// 	//use morgan to log at command line
+// 	app.use(morgan('combined')); //'combined' outputs the Apache style LOGs
+// }
+
+db_name = 'users';
+
+mongodb_connection_string = 'mongodb://localhost:27017/' + db_name;
+//take advantage of openshift env vars when available:
+if(process.env.OPENSHIFT_MONGODB_DB_URL){
+	mongodb_connection_string = process.env.OPENSHIFT_MONGODB_DB_URL + db_name;
 }
 
 //parse application/json and look for raw text
@@ -98,7 +102,12 @@ app.route("/book/:id")
 	.put(book.updateBook);
 
 
-app.listen(port);
-console.log("Listening on port " + port);
+
+var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
+
+app.listen(server_port, server_ip_address, function(){
+  console.log("Listening on " + server_ip_address + ", server_port " + server_port)
+});
 
 module.exports = app; // for testing
