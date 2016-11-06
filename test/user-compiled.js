@@ -31,7 +31,7 @@ describe('Users', function () {
     describe('Register', function () {
         it('it should register the user', function (done) {
             chai.request(server).post('/register').send(user).end(function (err, res) {
-                res.should.have.status(200);
+                res.should.have.status(201);
                 res.body.should.be.a('object');
                 res.body.should.have.property('message', 'User registered successfully!');
                 done();
@@ -42,7 +42,7 @@ describe('Users', function () {
             chai.request(server).post('/register').send(user).end();
 
             chai.request(server).post('/register').send(user).end(function (err, res) {
-                res.should.have.status(403);
+                res.should.have.status(400);
                 res.body.should.be.a('object');
                 res.body.should.have.property('message', 'User already exists!');
                 done();
@@ -62,7 +62,7 @@ describe('Users', function () {
         };
         it('it should fail to find the user', function (done) {
             chai.request(server).post('/login').send(user).end(function (err, res) {
-                res.should.have.status(403);
+                res.should.have.status(404);
                 res.body.should.be.a('object');
                 res.body.should.have.property('message', 'User not found');
                 done();
@@ -74,10 +74,8 @@ describe('Users', function () {
                 chai.request(server).post('/login').send(user).end(function (err, res) {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
-                    res.body.user.should.be.a('object');
                     res.body.should.have.property('message', 'User logged in successfully');
                     res.body.should.have.property('token');
-                    res.body.should.have.property('user');
                     done();
                 });
             });
