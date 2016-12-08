@@ -1,5 +1,6 @@
 let mongoose = require('mongoose');
 let Item = require('../models/item');
+let ItemCount = require('../models/itemCount');
 
 function postItem(req, res) {
     var newItem = new Item(req.body);
@@ -23,7 +24,7 @@ function getItem(req, res) {
 
 function getItems(req, res) {
     console.log(req.query.userId)
-    Item.find({ 'owner' : req.query.userId}, (err, data) => {
+    Item.find({'owner': req.query.userId}, (err, data) => {
         if (err) res.send(err);
         res.status(200).json(data);
     });
@@ -35,8 +36,8 @@ function deleteItem(req, res) {
     })
 }
 
-function updateItem(req, res){
-    Item.findById({_id : req.params.id}, (err, item) => {
+function updateItem(req, res) {
+    Item.findById({_id: req.params.id}, (err, item) => {
         if (err) res.send(err);
         Object.assign(item, req.body).save((err, item) => {
             if (err) res.send(err);
@@ -44,5 +45,48 @@ function updateItem(req, res){
         })
     })
 }
+
+function synchronize(req, res) {
+    console.log(req.body);
+    ItemCount.findOne({item: req.body.item, device: req.body.device}, (err, item) => {
+        if (err) res.send(err);
+        if (item == null) {
+            var newItemCount = new ItemCount(req.body);
+            newItemCount.save((err, item) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    ItemCount.find({item: req.body.item}, (err, items) => {
+                        if (err) {
+                            res.send(err);
+                        } else {
+                            console.log(items);
+                            res.json(items);
+                        }
+                    });
+                }
+            })
+        } else {
+            Object.assign(item, req.body).save((err, item) => {
+                if (err) {
+                    res.send(err);
+                } else {
+                    ItemCount.find({item: req.body.item}, (err, items) => {
+                        if (err) {
+                            res.send(err);
+                        } else {
+                            console.log(items);
+                            res.json(items);
+                        }
+
+                    });
+                }
+
+            })
+        }
+    })
+}
+
+
 //export all the functions
-module.exports = {getItem, getItems, postItem, deleteItem, updateItem};
+module.exports = {getItem, getItems, postItem, deleteItem, updateItem, synchronize};
